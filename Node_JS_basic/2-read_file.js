@@ -1,28 +1,35 @@
 const fs = require('fs');
-const csvParser = require('csv-parser');
-
-const result = [];
 
 function countStudents(path) {
-  fs.createReadStream(path, { encoding: 'utf-8' })
-    .pipe(csvParser())
-    .on('data', (data) => {
-      result.push(data);
-    })
-    .on('end', () => {
-      console.log(`Number of students: ${result.length}`);
+  let content;
 
-      const sweStudents = result.filter((student) => student.field !== 'CS');
-      const csStudents = result.filter((student) => student.field === 'CS');
-      const listOfCsStudents = csStudents.map((student) => student.firstname);
-      const listOfSweStudents = sweStudents.map((student) => student.firstname);
+  try {
+    content = fs.readFileSync(path, 'utf-8');
+  } catch (err) {
+    throw new Error('Cannot load the database');
+  }
+  content = content.split('\n');
+  const students = content.map((item) => item.split(','));
+  console.log(students.length - 1);
 
-      console.log(`Number of students in CS: ${csStudents.length}. List: ${listOfCsStudents.join(', ')} `);
-      console.log(`Number of students in CS: ${sweStudents.length}. List: ${listOfSweStudents.join(', ')} `);
-    })
-    .on('error', () => {
-      console.log('Cannot load the database');
-    });
+  const fields = {};
+  for (const i in students) {
+    if (i !== 0) {
+      if (!fields[students[i][3]]) fields[students[i][3]] = [];
+
+      fields[students[i][3]].push(students[i][0]);
+    }
+  }
+
+  delete fields.field;
+
+  for (const key of Object.keys(fields)) {
+    console.log(
+      `Numb0er of students in ${key}: ${fields[key].length}. List: ${fields[
+        key
+      ].join(', ')}`,
+    );
+  }
 }
 
-module.exports = countStudents;
+countStudents('./database.csv');
