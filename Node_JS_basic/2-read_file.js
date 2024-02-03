@@ -10,7 +10,7 @@ function countStudents(path) {
   }
   content = content.split('\n');
   const students = content.map((item) => item.split(','));
-  console.log(students.length - 1);
+  console.log(`Number of students: ${students.length - 1}`);
 
   const fields = {};
   for (const i in students) {
@@ -25,11 +25,12 @@ function countStudents(path) {
 
   for (const key of Object.keys(fields)) {
     console.log(
-      `Numb0er of students in ${key}: ${fields[key].length}. List: ${fields[
+      `Number of students in ${key}: ${fields[key].length}. List: ${fields[
         key
       ].join(', ')}`,
     );
   }
 }
 
+countStudents("database.csv")
 module.exports = countStudents;
