@@ -7,6 +7,7 @@ async function countStudents(path) {
   } catch (err) {
     console.log('Cannot load the database');
   }
+
   const content = data.split('\n');
   const tableOfUsers = content.map((row) => row.split('\n')).slice(1, content.length);
   const STUDENT_NUMBER = content.slice(1, content.length).length;
@@ -27,5 +28,4 @@ async function countStudents(path) {
   console.log(`Number of students in SWE: ${sweStudent.length} List: ${swe.join(', ')}`);
 }
 
-countStudents('./database.csv')
 module.exports = countStudents;
