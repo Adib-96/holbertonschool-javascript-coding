@@ -27,4 +27,5 @@ async function countStudents(path) {
   console.log(`Number of students in SWE: ${sweStudent.length} List: ${swe.join(', ')}`);
 }
 
+countStudents('./database.csv')
 module.exports = countStudents;
